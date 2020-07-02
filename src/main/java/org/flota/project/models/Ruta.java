@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Ruta {
 
-    private ArrayList<Entrega> entrega;
-    private Courier courier;
+    //private ArrayList<Entrega> entrega;
+    private Conductor conductor;
 
     public void calcularRuta(){
         /*

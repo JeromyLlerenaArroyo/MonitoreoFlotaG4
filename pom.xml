@@ -14,10 +14,16 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <arcgis.version>100.8.0</arcgis.version>
   </properties>
-
+  <repositories>
+        <repository>
+            <id>arcgis</id>
+            <url>https://esri.bintray.com/arcgis</url>
+        </repository>
+    </repositories>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -25,8 +31,31 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <!--JavaFX dependencies -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>11</version>
+    </dependency> 
+    <!--ArcGIS dependencies -->
+    <dependency>
+        <groupId>com.esri.arcgisruntime</groupId>
+        <artifactId>arcgis-java</artifactId>
+        <version>${arcgis.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.esri.arcgisruntime</groupId>
+        <artifactId>arcgis-java-jnilibs</artifactId>
+        <version>${arcgis.version}</version>
+        <type>zip</type>
+    </dependency>
+    <dependency>
+        <groupId>com.esri.arcgisruntime</groupId>
+        <artifactId>arcgis-java-resources</artifactId>
+        <version>${arcgis.version}</version>
+        <type>zip</type>
+    </dependency>   
   </dependencies>
-
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
