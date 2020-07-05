@@ -40,7 +40,7 @@ public class Ventana extends Application {
             }
         });
 
-        //stackPane.getChildren().add(btnNuevo);
+        stackPane.getChildren().add(btnNuevo);
     }
 
     public void muestraNuevaVentana() {
