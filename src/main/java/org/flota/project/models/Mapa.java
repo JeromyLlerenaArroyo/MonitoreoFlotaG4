@@ -17,12 +17,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class Mapa implements IMapa {
 
     private MapView mapView;
-    
+
     private double coordenadaXInicial;
     private double coordenadaYInicial;
     private double coordenadaXActual;
@@ -32,7 +33,7 @@ public class Mapa implements IMapa {
 
     private RegistroLog registro = RegistroLog.getInstance();
 
-    public Mapa()   {
+    public Mapa() {
 
         // create a MapView to display the map and add it to the stack pane
         mapView = new MapView();
@@ -44,67 +45,78 @@ public class Mapa implements IMapa {
         mapView.setMap(map);
 
         // latitude, longitude, scale
-        //Viewpoint viewpoint = new Viewpoint(27.3805833, 33.6321389, 6E3);
+        // Viewpoint viewpoint = new Viewpoint(27.3805833, 33.6321389, 6E3);
         Date date = new Date();
         this.fechaCreacion = date.toString();
         this.coordenadaXInicial = -12.0560;
         this.coordenadaYInicial = -77.0844;
         this.nombreMapa = "MAPA-PRUEBA";
-        Viewpoint viewpoint = new Viewpoint(this.coordenadaXInicial, this.coordenadaYInicial, 12000);   // UNMSM
+        Viewpoint viewpoint = new Viewpoint(this.coordenadaXInicial, this.coordenadaYInicial, 12000); // UNMSM
 
         // take 5 seconds to move to viewpoint
-        final ListenableFuture<Boolean> viewpointSetFuture = mapView.setViewpointAsync(viewpoint, 5);
+        ListenableFuture<Boolean> viewpointSetFuture = mapView.setViewpointAsync(viewpoint, 5);
         viewpointSetFuture.addDoneListener(() -> {
             try {
                 boolean completed = viewpointSetFuture.get();
                 if (completed) {
-                    // registro.log("Acercamiento completado");
+                    registro.info("Acercamiento completado", RegistroLog.FILE_CHANNEL);
                 }
             } catch (InterruptedException e) {
-                // registro.log("Acercamiento interrumpido");
+                try {
+                    registro.error("Acercamiento interrumpido", RegistroLog.FILE_CHANNEL);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             } catch (ExecutionException e) {
                 // Deal with exception during animation...
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
             }
         });
-        
-      // click event to display the callout with the formatted coordinates of the clicked location
-      mapView.setOnMouseClicked(e -> {
-        // check that the primary mouse button was clicked and user is not panning
-        if (e.isStillSincePress() && e.getButton() == MouseButton.PRIMARY) {
-          // get the map point where the user clicked
-          Point2D point = new Point2D(e.getX(), e.getY());
-          //System.out.println("Coordenadas: " + e.getX() + ", " + e.getY());
-          System.out.println("FECHA DE CREACIÓN: " + this.fechaCreacion);
-          System.out.println("NOMBRE DE MAPA: " + this.nombreMapa);
-          Point mapPoint = mapView.screenToLocation(point);
-          // show the callout at the point with the different coordinate format strings
-          showCalloutWithLocationCoordinates(mapPoint);
-        }
-      });        
+
+        // click event to display the callout with the formatted coordinates of the
+        // clicked location
+        mapView.setOnMouseClicked(e -> {
+            // check that the primary mouse button was clicked and user is not panning
+            if (e.isStillSincePress() && e.getButton() == MouseButton.PRIMARY) {
+                // get the map point where the user clicked
+                Point2D point = new Point2D(e.getX(), e.getY());
+                // System.out.println("Coordenadas: " + e.getX() + ", " + e.getY());
+                System.out.println("FECHA DE CREACIÓN: " + this.fechaCreacion);
+                System.out.println("NOMBRE DE MAPA: " + this.nombreMapa);
+                Point mapPoint = mapView.screenToLocation(point);
+                // show the callout at the point with the different coordinate format strings
+                showCalloutWithLocationCoordinates(mapPoint);
+            }
+        });
     }
 
-    private void showCalloutWithLocationCoordinates(Point location) {
+    private void showCalloutWithLocationCoordinates(final Point location) {
         Callout callout = mapView.getCallout();
         callout.setTitle("Location:");
 
         this.coordenadaXActual = location.getX();
         this.coordenadaYActual = location.getY();
-        // registro.log("Coordenadas: " + this.coordenadaXActual + ", " + this.coordenadaYActual);
+        try {
+            registro.info("Coordenadas: " + this.coordenadaXActual + ", " + this.coordenadaYActual,
+                    RegistroLog.CONSOLE_CHANNEL);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        String latLonDecimalDegrees = CoordinateFormatter.toLatitudeLongitude(location, CoordinateFormatter
-            .LatitudeLongitudeFormat.DECIMAL_DEGREES, 4);
-        String latLonDegMinSec = CoordinateFormatter.toLatitudeLongitude(location, CoordinateFormatter
-            .LatitudeLongitudeFormat.DEGREES_MINUTES_SECONDS, 1);
+        String latLonDecimalDegrees = CoordinateFormatter.toLatitudeLongitude(location,
+                CoordinateFormatter.LatitudeLongitudeFormat.DECIMAL_DEGREES, 4);
+        String latLonDegMinSec = CoordinateFormatter.toLatitudeLongitude(location,
+                CoordinateFormatter.LatitudeLongitudeFormat.DEGREES_MINUTES_SECONDS, 1);
 
-        String utm = CoordinateFormatter.toUtm(location, CoordinateFormatter.UtmConversionMode.LATITUDE_BAND_INDICATORS,
-            true);
+        String utm = CoordinateFormatter.toUtm(location,
+                CoordinateFormatter.UtmConversionMode.LATITUDE_BAND_INDICATORS, true);
         String usng = CoordinateFormatter.toUsng(location, 4, true);
-        callout.setDetail(
-                "Decimal Degrees: " + latLonDecimalDegrees + "\n" +
-                "Degrees, Minutes, Seconds: " + latLonDegMinSec + "\n" +
-                "UTM: " + utm + "\n" +
-                "USNG: " + usng + "\n"
-        );
+        callout.setDetail("Decimal Degrees: " + latLonDecimalDegrees + "\n" + "Degrees, Minutes, Seconds: "
+                + latLonDegMinSec + "\n" + "UTM: " + utm + "\n" + "USNG: " + usng + "\n");
         mapView.getCallout().showCalloutAt(location, new Duration(500));
     }
 
@@ -112,20 +124,25 @@ public class Mapa implements IMapa {
         return mapView;
     }
 
-    public void setMapView(MapView mapView) {
+    public void setMapView(final MapView mapView) {
         this.mapView = mapView;
     }
 
+    public void imprimeCoordenadasActual() {
 
-    public void imprimeCoordenadasActual()  {
-
-        //System.out.println("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
-        // registro.log("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
+        System.out.println("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
+        try {
+            registro.info("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]",
+                    RegistroLog.CONSOLE_CHANNEL);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public IMapa copiar() {
-        //return new Mapa(this);
+        // return new Mapa(this);
         Mapa m = new Mapa();
         m.coordenadaXInicial = this.coordenadaXInicial;
         m.coordenadaYInicial = this.coordenadaYInicial;
