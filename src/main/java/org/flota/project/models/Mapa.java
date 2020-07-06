@@ -17,6 +17,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.util.Duration;
 
+import java.util.Date;
+
 public class Mapa implements IMapa {
 
     private MapView mapView;
@@ -25,6 +27,8 @@ public class Mapa implements IMapa {
     private double coordenadaYInicial;
     private double coordenadaXActual;
     private double coordenadaYActual;
+    private String fechaCreacion;
+    private String nombreMapa;
 
     private RegistroLog registro = RegistroLog.getInstance();
 
@@ -41,8 +45,11 @@ public class Mapa implements IMapa {
 
         // latitude, longitude, scale
         //Viewpoint viewpoint = new Viewpoint(27.3805833, 33.6321389, 6E3);
+        Date date = new Date();
+        this.fechaCreacion = date.toString();
         this.coordenadaXInicial = -12.0560;
         this.coordenadaYInicial = -77.0844;
+        this.nombreMapa = "MAPA-PRUEBA";
         Viewpoint viewpoint = new Viewpoint(this.coordenadaXInicial, this.coordenadaYInicial, 12000);   // UNMSM
 
         // take 5 seconds to move to viewpoint
@@ -51,10 +58,10 @@ public class Mapa implements IMapa {
             try {
                 boolean completed = viewpointSetFuture.get();
                 if (completed) {
-                    registro.log("Acercamiento completado");
+                    // registro.log("Acercamiento completado");
                 }
             } catch (InterruptedException e) {
-                registro.log("Acercamiento interrumpido");
+                // registro.log("Acercamiento interrumpido");
             } catch (ExecutionException e) {
                 // Deal with exception during animation...
             }
@@ -67,6 +74,8 @@ public class Mapa implements IMapa {
           // get the map point where the user clicked
           Point2D point = new Point2D(e.getX(), e.getY());
           //System.out.println("Coordenadas: " + e.getX() + ", " + e.getY());
+          System.out.println("FECHA DE CREACIÓN: " + this.fechaCreacion);
+          System.out.println("NOMBRE DE MAPA: " + this.nombreMapa);
           Point mapPoint = mapView.screenToLocation(point);
           // show the callout at the point with the different coordinate format strings
           showCalloutWithLocationCoordinates(mapPoint);
@@ -80,7 +89,7 @@ public class Mapa implements IMapa {
 
         this.coordenadaXActual = location.getX();
         this.coordenadaYActual = location.getY();
-        registro.log("Coordenadas: " + this.coordenadaXActual + ", " + this.coordenadaYActual);
+        // registro.log("Coordenadas: " + this.coordenadaXActual + ", " + this.coordenadaYActual);
 
         String latLonDecimalDegrees = CoordinateFormatter.toLatitudeLongitude(location, CoordinateFormatter
             .LatitudeLongitudeFormat.DECIMAL_DEGREES, 4);
@@ -111,7 +120,7 @@ public class Mapa implements IMapa {
     public void imprimeCoordenadasActual()  {
 
         //System.out.println("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
-        registro.log("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
+        // registro.log("Coordenadas actual: [" + this.coordenadaXActual + ", " + this.coordenadaYActual + "]");
     }
 
     @Override
@@ -122,7 +131,9 @@ public class Mapa implements IMapa {
         m.coordenadaYInicial = this.coordenadaYInicial;
         m.coordenadaXActual = this.coordenadaXActual;
         m.coordenadaYActual = this.coordenadaYActual;
-        return m;        
+        m.fechaCreacion = this.fechaCreacion;
+        m.nombreMapa = this.nombreMapa;
+        return m;       
     }
 
 }
