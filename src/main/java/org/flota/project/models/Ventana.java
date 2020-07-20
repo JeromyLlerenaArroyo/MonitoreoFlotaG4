@@ -8,6 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
+import com.esri.arcgisruntime.mapping.view.Graphic;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+
+import java.util.Arrays;
+
 public class Ventana extends Application {
 
     private Mapa mapaBase;
@@ -31,32 +39,17 @@ public class Ventana extends Application {
         mapaBase.imprimeCoordenadasActual();
         stackPane.getChildren().add(mapaBase.getMapView());
 
-        Button btnNuevo = new Button();
-        btnNuevo.setText("Nuevo");
-        btnNuevo.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                muestraNuevaVentana();
-            }
-        });
+        // create a graphics overlay for displaying different geometries as graphics
+        GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+        mapaBase.getMapView().getGraphicsOverlays().add(graphicsOverlay);
 
-        stackPane.getChildren().add(btnNuevo);
+        // create a point geometry
+        Point point = new Point(-77.0844, -12.0561, SpatialReferences.getWgs84());
+        Graphic pointGraphic = new Graphic(point, new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.DIAMOND, 0xFF0000FF, 14));
+
+        graphicsOverlay.getGraphics().addAll(Arrays.asList(pointGraphic));
+        //graphicsOverlay.getGraphics().remove(point);
+        //stackPane.getChildren().addAll(mapaBase.getMapView());
+
     }
-
-    public void muestraNuevaVentana() {
-        Stage stage = new Stage();
-        StackPane stackPane = new StackPane();
-        Scene scene = new Scene(stackPane);
-        stage.setScene(scene);
-
-        //  Clonacion de MapaBase
-        Mapa mapaBase2 = (Mapa)mapaBase.copiar();
-
-        mapaBase2.imprimeCoordenadasActual();
-        stackPane.getChildren().add(mapaBase2.getMapView());
-
-        stage.show();
-    }    
-    
-
 }

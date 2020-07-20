@@ -42,6 +42,7 @@ public class Monitoreo extends WebSocketServer {
 	}
 
 	@Override
+
 	public void onOpen( WebSocket conn, ClientHandshake handshake ) {
         // Save connection
         userIDConn.put(dinamicID++, conn);
