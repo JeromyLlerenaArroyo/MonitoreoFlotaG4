@@ -46,7 +46,7 @@ public class Mapa implements IMapa {
         Viewpoint viewpoint = new Viewpoint(this.coordenadaXInicial, this.coordenadaYInicial, 12000);   // UNMSM
 
         // take 5 seconds to move to viewpoint
-        final ListenableFuture<Boolean> viewpointSetFuture = mapView.setViewpointAsync(viewpoint, 5);
+        final ListenableFuture<Boolean> viewpointSetFuture = mapView.setViewpointAsync(viewpoint, 1);
         viewpointSetFuture.addDoneListener(() -> {
             try {
                 boolean completed = viewpointSetFuture.get();

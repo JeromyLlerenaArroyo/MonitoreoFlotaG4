@@ -27,9 +27,11 @@ public class Ventana extends Application {
         stage.setScene(scene);
 
         // create a MapView to display the map and add it to the stack pane
-        mapaBase = new Mapa();
-        mapaBase.imprimeCoordenadasActual();
-        stackPane.getChildren().add(mapaBase.getMapView());
+        //mapaBase = new Mapa();
+        //mapaBase.imprimeCoordenadasActual();
+        //stackPane.getChildren().add(mapaBase.getMapView());
+        FachadaMapa facade = new FachadaMapa();
+        mapaBase = facade.mostrarMapa(stackPane);
 
         Button btnNuevo = new Button();
         btnNuevo.setText("Nuevo");
