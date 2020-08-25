@@ -1,5 +1,8 @@
 package org.flota.project.models;
 
+import com.esri.arcgisruntime.geometry.PointCollection;
+import com.esri.arcgisruntime.geometry.Polyline;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,7 +16,9 @@ import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+import org.flota.project.patterns.Context;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Ventana extends Application {
@@ -35,9 +40,9 @@ public class Ventana extends Application {
         stage.setScene(scene);
 
         // create a MapView to display the map and add it to the stack pane
-        mapaBase = new Mapa();
-        mapaBase.imprimeCoordenadasActual();
-        stackPane.getChildren().add(mapaBase.getMapView());
+        this.mapaBase = new Mapa();
+        this.mapaBase.imprimeCoordenadasActual();
+        stackPane.getChildren().add(this.mapaBase.getMapView());
 
         // create a graphics overlay for displaying different geometries as graphics
         GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
@@ -50,6 +55,30 @@ public class Ventana extends Application {
         graphicsOverlay.getGraphics().addAll(Arrays.asList(pointGraphic));
         //graphicsOverlay.getGraphics().remove(point);
         //stackPane.getChildren().addAll(mapaBase.getMapView());
+
+
+
+        /* Context */
+
+        Context context = new Context();
+        context.setStrategy(new MotoRutaStrategy());
+        Ruta ruta = context.crearRuta();
+
+
+        PointCollection polylinePoints = new PointCollection(SpatialReferences.getWgs84());
+
+        polylinePoints.addAll(ruta.getPoints());
+
+        Polyline polyline = new Polyline(polylinePoints);
+        SimpleLineSymbol polylineSymbol = new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, 0xFF00FF00, 3.0f);
+        Graphic polylineGraphic = new Graphic(polyline, polylineSymbol);
+        graphicsOverlay.getGraphics().add(polylineGraphic);
+
+
+        JSONExportVisitor jsonVisitor = new JSONExportVisitor();
+        for (Punto punto : ruta.getPuntos()){
+            punto.accept(jsonVisitor);
+        }
 
     }
 }

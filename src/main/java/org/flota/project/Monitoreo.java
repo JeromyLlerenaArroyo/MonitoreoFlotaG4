@@ -42,7 +42,6 @@ public class Monitoreo extends WebSocketServer {
 	}
 
 	@Override
-
 	public void onOpen( WebSocket conn, ClientHandshake handshake ) {
         // Save connection
         userIDConn.put(dinamicID++, conn);
@@ -68,11 +67,11 @@ public class Monitoreo extends WebSocketServer {
         Map map = gson.fromJson(message, Map.class);
         
         String toID = (String)map.get("toID");
-        System.out.println( toID );
-        double lat = (double)map.get("latitude");
-        System.out.println( lat );
-        double lon = (double)map.get("longitude");
-        System.out.println( lon );
+		System.out.println( toID );
+		double lat = (double)map.get("latitude");
+		System.out.println( lat );
+		double lon = (double)map.get("longitude");
+		System.out.println( lon );
 
         GeoHash geo = GeoHash.withCharacterPrecision(lat, lon, 10);
         
@@ -87,6 +86,7 @@ public class Monitoreo extends WebSocketServer {
 
         // Send message to receptor
         userIDConn.get(Integer.parseInt(toID)).send(geo.toString());
+        // dibujar punto conductor
 
 	}
 	@Override

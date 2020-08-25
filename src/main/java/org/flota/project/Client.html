@@ -34,4 +34,15 @@ function showMessage(message) {
   messageElem.textContent = message;
   document.getElementById('messages').prepend(messageElem);
 }
+
+/*
+s = new WebSocket('ws://localhost:8887/');
+
+s.onmessage = function(event) {
+  console.log(event.data);
+};
+var a = {'toID': '1', 'latitude': 0.0, 'longitude': 0.1}
+
+s.send(JSON.stringify(a))
+ 9*/
 </script>
