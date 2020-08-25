@@ -18,7 +18,6 @@ import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import org.flota.project.patterns.Context;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Ventana extends Application {
@@ -40,9 +39,29 @@ public class Ventana extends Application {
         stage.setScene(scene);
 
         // create a MapView to display the map and add it to the stack pane
+        /*
         this.mapaBase = new Mapa();
         this.mapaBase.imprimeCoordenadasActual();
         stackPane.getChildren().add(this.mapaBase.getMapView());
+        */
+        //mapaBase = new Mapa();
+        //mapaBase.imprimeCoordenadasActual();
+        //stackPane.getChildren().add(mapaBase.getMapView());
+        FachadaMapa facade = new FachadaMapa();
+        mapaBase = facade.mostrarMapa(stackPane);
+
+        Button btnNuevo = new Button();
+        btnNuevo.setText("Nuevo");
+        btnNuevo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                muestraNuevaVentana();
+            }
+        });
+
+        stackPane.getChildren().add(btnNuevo);
+
+
 
         // create a graphics overlay for displaying different geometries as graphics
         GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
@@ -61,7 +80,8 @@ public class Ventana extends Application {
         /* Context */
 
         Context context = new Context();
-        context.setStrategy(new MotoRutaStrategy());
+        context.setStrategy(new CamionRutaStrategy());
+        //context.setStrategy(new MotoRutaStrategy());
         Ruta ruta = context.crearRuta();
 
 
@@ -81,4 +101,20 @@ public class Ventana extends Application {
         }
 
     }
+
+    public void muestraNuevaVentana() {
+        Stage stage = new Stage();
+        StackPane stackPane = new StackPane();
+        Scene scene = new Scene(stackPane);
+        stage.setScene(scene);
+
+        //  Clonacion de MapaBase
+        Mapa mapaBase2 = (Mapa)mapaBase.copiar();
+
+        mapaBase2.imprimeCoordenadasActual();
+        stackPane.getChildren().add(mapaBase2.getMapView());
+
+        stage.show();
+    }
+
 }

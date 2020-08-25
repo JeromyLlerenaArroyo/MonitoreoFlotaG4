@@ -1,38 +1,10 @@
 package org.flota.project.models;
 
-import org.flota.project.patterns.Visitor;
 
-public class Entrega extends Punto {
+public interface Entrega {
 
-    private String direccion;
-    private String comentarios;
-    private String documento;
+    public void listarEntrega();
 
-    public Entrega(double lon, double lat) {
-        super(lon, lat);
-    }
-
-    public Entrega(double lon, double lat, String direccion, String comentarios, String documento) {
-        super(lon, lat);
-        this.direccion = direccion;
-        this.comentarios = comentarios;
-        this.documento = documento;
-    }
-
-    public String getDireccion(){
-        return direccion;
-    }
-
-    public String getComentarios(){
-        return comentarios;
-    }
-
-    public String getDocumento(){
-        return documento;
-    }
-
-    @Override
-    public void accept(Visitor visitor) {
-        visitor.visitEntrega(this);
-    }
+    public Double calcularCosto();
+    
 }

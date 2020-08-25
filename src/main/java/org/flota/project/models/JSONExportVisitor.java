@@ -18,7 +18,7 @@ public class JSONExportVisitor implements Visitor {
     }
 
     @Override
-    public Map<String, String> visitEntrega(Entrega entrega) {
+    public Map<String, String> visitEntrega(Despacho entrega) {
         Map<String, String> json = new HashMap <>();
         json.put("comentarios", entrega.getComentarios());
         json.put("direccion", entrega.getDireccion());
