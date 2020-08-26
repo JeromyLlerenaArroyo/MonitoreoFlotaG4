@@ -14,7 +14,8 @@ public class Server {
 
         RegistroLog.getInstance().log("Iniciando servidor");
 
-        ArcGISRuntimeEnvironment.setInstallDirectory("/Users/tatsudy/Downloads/arcgis-runtime-sdk-java-100.8.0");
+        //ArcGISRuntimeEnvironment.setInstallDirectory("/Users/tatsudy/Downloads/arcgis-runtime-sdk-java-100.8.0");
+        ArcGISRuntimeEnvironment.setInstallDirectory("C:\\Java\\arcgis-runtime-sdk-java-100.8.0");
 
         GuiaEntrega guia = new GuiaEntrega();
         guia.agregarEntrega(new EntregaProgramada("09:00-10:00", "23/07/2020"));

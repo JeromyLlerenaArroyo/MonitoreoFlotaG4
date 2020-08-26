@@ -80,8 +80,8 @@ public class Ventana extends Application {
         /* Context */
 
         Context context = new Context();
-        context.setStrategy(new CamionRutaStrategy());
-        //context.setStrategy(new MotoRutaStrategy());
+        //context.setStrategy(new CamionRutaStrategy());
+        context.setStrategy(new MotoRutaStrategy());
         Ruta ruta = context.crearRuta();
 
 

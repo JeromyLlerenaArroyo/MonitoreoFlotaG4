@@ -18,11 +18,11 @@ public class JSONExportVisitor implements Visitor {
     }
 
     @Override
-    public Map<String, String> visitEntrega(Despacho entrega) {
+    public Map<String, String> visitDespacho(Despacho despacho) {
         Map<String, String> json = new HashMap <>();
-        json.put("comentarios", entrega.getComentarios());
-        json.put("direccion", entrega.getDireccion());
-        json.put("documento", entrega.getDocumento());
+        json.put("comentarios", despacho.getComentarios());
+        json.put("direccion", despacho.getDireccion());
+        json.put("documento", despacho.getDocumento());
         System.out.println(json);
         return json;
     }

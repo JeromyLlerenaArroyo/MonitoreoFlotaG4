@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface Visitor {
     Map<String, String> visitRecojo(Recojo recojo);
-    Map<String, String> visitEntrega(Despacho entrega);
+    Map<String, String> visitDespacho(Despacho despacho);
 }

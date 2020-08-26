@@ -32,6 +32,6 @@ public class Despacho extends Punto {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visitEntrega(this);
+        visitor.visitDespacho(this);
     }
 }
