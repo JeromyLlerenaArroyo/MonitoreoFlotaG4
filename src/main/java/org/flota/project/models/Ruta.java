@@ -6,11 +6,13 @@ import java.util.ArrayList;
 
 public class Ruta {
 
+    private double pesoTotal = 0;
     private ArrayList<Punto> puntos = new ArrayList<Punto>();
     //private Conductor conductor;
 
-    public void addPunto(Punto punto){
+    public void addPunto(Punto punto, int peso){
         puntos.add(punto);
+        pesoTotal += peso;
     }
 
     public ArrayList<Point> getPoints(){
@@ -23,6 +25,10 @@ public class Ruta {
 
     public ArrayList<Punto> getPuntos(){
         return puntos;
+    }
+
+    public double getPesoTotal() {
+        return pesoTotal;
     }
 
 }

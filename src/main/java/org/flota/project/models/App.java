@@ -22,7 +22,7 @@ public class App extends Application {
     private MapView mapView;
 
     public static void main(String[] args) {
-        ArcGISRuntimeEnvironment.setInstallDirectory("/Users/tatsudy/Downloads/arcgis-runtime-sdk-java-100.8.0");
+        ArcGISRuntimeEnvironment.setInstallDirectory("/Users/gianmarco/Downloads/arcgis-runtime-sdk-java-100.8.0");
         Application.launch(args);
     }
 
